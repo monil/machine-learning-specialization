@@ -1,0 +1,21 @@
+﻿# Python
+venv/
+ml-env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment / Secrets
+.env
+*.env
+
+# IDEs
+.vscode/
+.idea/
