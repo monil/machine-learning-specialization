@@ -2,7 +2,7 @@ Neural networks Intuition
 
 - Algorithms that started to mimic the brain 
 
-- Neuron - Takes 1..n inputs applies the model outputs 1..m results called **activations**
+- Neuron - Takes 1..n inputs applies the model and then outputs 1..m results called **activations**
 
 - Layer consists of one or more neurons as above. Final layer is the output layer. 
 
@@ -12,4 +12,14 @@ Eg: Input layer consisting for 4 numbers goes to first layer consisting of 3 neu
 
 
 - All layer between input and output layer are called hidden layers
+
+=================================================================
+
+Use TensorFlow for Inference in code with Neural Networks. Tensor flow and numpy has their way of representing a matrix.
+
+Eg: to create a neural network in Tensorflow
+
+    layer_1 = Dense(units=3, activation="sigmoid")
+    layer_2 = Dense(units=1, activation="sigmoid")
+    model = sequential([layer_1, layer_2])
 
