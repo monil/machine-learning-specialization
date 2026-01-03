@@ -23,3 +23,26 @@ Eg: to create a neural network in Tensorflow
     layer_2 = Dense(units=1, activation="sigmoid")
     model = sequential([layer_1, layer_2])
 
+Check Sigmoid curve
+
+==================================================================
+
+Training a neural network steps
+
+1. Specify how to compute o/p given input x and parameters w,b (Define a model)
+
+eg: fw_b(x) = w*x + b 
+            = np.dot(w,x) + b
+
+    f_x = 1 / (1 + np.exp(-z))
+
+2. Specify loss and cost 
+
+    model.compile(X, y, loss=BinaryCrossEntropy())
+
+3. Train on data to minimize Jw_b ( Gradient Descent)
+
+    model.fit(X,y, epochs=100) - 100 iterations of loss function 
+
+====================================================================
+
