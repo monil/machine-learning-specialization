@@ -46,3 +46,55 @@ eg: fw_b(x) = w*x + b
 
 ====================================================================
 
+Diffferent Types of activation functions for neurons, used largely in neural networks
+
+1. Sigmoid : Emits o/p either 0 or 1
+2. ReLU (Rectified Linear Unit) : g(z) = max (0, z)
+3. Linear activation unit : g(z) = z , Also called as no activation function
+
+
+How to choose activation function 
+
+Binary Classification : Use sigmoid activation function
+
+Regression (eg: predicted stock price) : Linear activation function
+
+Regression (ReLU) only positive (eg: Predicting house prices) : 
+
+
+====================================================================
+
+Multiclass classification (N possible outputs)
+
+Output layer uses softmax regression 
+
+
+=====================================================================
+
+Adam optimization algorithm - Better than gradient descent and faster - used as a default for neural networks. 
+
+===================================================================
+
+Debugging learning algorithm 
+
+- Get More training examples
+  If high bias increasing training data has no effect. If high variance increasing training data does help 
+
+- Try smaller set of features 
+  Makes model simpler and reduces high variance problem 
+
+- Try getting additional features 
+  Makes model flexible reduces high bias problems
+
+- Try adding polynomial features 
+  Fixes high bias 
+
+- Try decrasing lamda
+  Fixes high bias 
+
+- Try increasing lambda
+  Fixes high variance
+
+High Bias - Unable to fit in more training set 
+
+High Variance - Unable to fit in more test set

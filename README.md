@@ -20,6 +20,12 @@
 
 **Regularization**: Techniques that penalize model complexity (e.g., L1 or L2 penalties) or constrain training (dropout, early stopping) to reduce overfitting and improve generalization.
 
----
+**Bias**: High Bias (underfit). Jtrain is high and Jcv is high. 
 
-If you want this shortened further (top 5 definitions) or exported as a one-page PDF, tell me which format you prefer.
+**Variance**: overfit. Jtrain is low & Jcv is very high. 
+
+=============================================================
+
+
+  
+  
