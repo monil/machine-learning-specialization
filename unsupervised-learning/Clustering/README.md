@@ -25,3 +25,9 @@ Choosing the number of clusters
 
 - Elbow method
 - Based on downstream usecase of the model
+
+
+*****************************************************************************************************************
+
+2. Anomaly Detection
+
