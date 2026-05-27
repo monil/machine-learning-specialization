@@ -1,100 +1,141 @@
-Neural networks Intuition 
+# Neural Networks
 
-- Algorithms that started to mimic the brain 
+## Overview
 
-- Neuron - Takes 1..n inputs applies the model and then outputs 1..m results called **activations**
+Neural networks are algorithms originally inspired by the brain. They learn complex, non-linear mappings by composing simple operations across many layers, making them powerful for tasks like image recognition, speech processing, and language modeling.
 
-- Layer consists of one or more neurons as above. Final layer is the output layer. 
+---
 
-- Neural networks is formed by multiple layer as mentioned above
+## Intuition
 
-Eg: Input layer consisting for 4 numbers goes to first layer consisting of 3 neurons which outputs 3 numbers called activation values of layer 1 and is fed to output layer which emits final output also called as activation of output layer.
+- **Neuron**: Takes 1…n inputs, computes a weighted sum plus bias, applies an activation function, and outputs 1…m values called **activations**.
+- **Layer**: Consists of one or more neurons. The final layer is the **output layer**.
+- **Neural network**: Multiple layers stacked together. All layers between input and output are called **hidden layers**.
 
+**Example:** An input layer of 4 numbers feeds into a hidden layer of 3 neurons → 3 activation values → output layer emits the final prediction (also an activation).
 
-- All layer between input and output layer are called hidden layers
+---
 
-=================================================================
+## Forward Pass
 
-Use TensorFlow for Inference in code with Neural Networks. Tensor flow and numpy has their way of representing a matrix.
+For layer $l$:
+$$\mathbf{a}^{[l]} = g\!\left(W^{[l]}\mathbf{a}^{[l-1]} + \mathbf{b}^{[l]}\right)$$
 
-Eg: to create a neural network in Tensorflow
+where $g$ is the activation function, $W^{[l]}$ is the weight matrix, and $\mathbf{a}^{[0]} = \mathbf{x}$ (the input).
 
-    layer_1 = Dense(units=3, activation="sigmoid")
-    layer_2 = Dense(units=1, activation="sigmoid")
-    model = sequential([layer_1, layer_2])
+---
 
-Check Sigmoid curve
+## TensorFlow / Keras Implementation
 
-==================================================================
+```python
+layer_1 = Dense(units=3, activation="sigmoid")
+layer_2 = Dense(units=1, activation="sigmoid")
+model = Sequential([layer_1, layer_2])
+```
 
-Training a neural network steps
+---
 
-1. Specify how to compute o/p given input x and parameters w,b (Define a model)
+## Training a Neural Network
 
-eg: fw_b(x) = w*x + b 
-            = np.dot(w,x) + b
+### Step 1 — Define the model
+Specify how to compute output given input $\mathbf{x}$ and parameters $W, b$:
+```python
+# Linear: f(x) = np.dot(w, x) + b
+# Logistic: f_x = 1 / (1 + np.exp(-z))
+```
 
-    f_x = 1 / (1 + np.exp(-z))
+### Step 2 — Specify loss and cost
+```python
+model.compile(optimizer='adam', loss=BinaryCrossentropy())
+```
 
-2. Specify loss and cost 
+Binary cross-entropy loss:
+$$L = -y\log(\hat{y}) - (1-y)\log(1-\hat{y})$$
 
-    model.compile(X, y, loss=BinaryCrossEntropy())
+### Step 3 — Train (gradient descent)
+```python
+model.fit(X, y, epochs=100)  # 100 iterations of backprop + parameter update
+```
 
-3. Train on data to minimize Jw_b ( Gradient Descent)
+---
 
-    model.fit(X,y, epochs=100) - 100 iterations of loss function 
+## Activation Functions
 
-====================================================================
+| Function | Formula | When to Use |
+|---|---|---|
+| **Sigmoid** | $g(z) = \frac{1}{1+e^{-z}}$ | Binary classification output layer |
+| **ReLU** | $g(z) = \max(0, z)$ | Hidden layers (default choice); avoids vanishing gradient |
+| **Linear** | $g(z) = z$ | Regression output layer (no activation) |
+| **Softmax** | $a_j = \frac{e^{z_j}}{\sum_k e^{z_k}}$ | Multi-class classification output layer |
 
-Diffferent Types of activation functions for neurons, used largely in neural networks
+### How to Choose Activation Functions
 
-1. Sigmoid : Emits o/p either 0 or 1
-2. ReLU (Rectified Linear Unit) : g(z) = max (0, z)
-3. Linear activation unit : g(z) = z , Also called as no activation function
+- **Output layer — binary classification**: Sigmoid
+- **Output layer — regression (any sign)**: Linear
+- **Output layer — regression (non-negative, e.g. house price)**: ReLU
+- **Hidden layers**: ReLU is the default; faster to train than sigmoid
 
+---
 
-How to choose activation function 
+## Multi-Class Classification
 
-Binary Classification : Use sigmoid activation function
+For $N$ possible output classes, the output layer uses **softmax regression**. Softmax outputs a probability distribution over all $N$ classes; the predicted class is $\arg\max_j a_j$.
 
-Regression (eg: predicted stock price) : Linear activation function
+---
 
-Regression (ReLU) only positive (eg: Predicting house prices) : 
+## Adam Optimizer
 
+Adam (Adaptive Moment Estimation) is better and faster than vanilla gradient descent:
+- Adapts a separate learning rate for each parameter
+- Combines momentum (exponentially weighted average of gradients) with RMSProp (squared gradient scaling)
+- Default choice for training neural networks in practice
 
-====================================================================
+```python
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3), loss=...)
+```
 
-Multiclass classification (N possible outputs)
+---
 
-Output layer uses softmax regression 
+## Debugging a Learning Algorithm
 
+| Symptom | Likely Cause | Fix |
+|---|---|---|
+| $J_{train}$ high | High bias | More features, add polynomial features, decrease $\lambda$ |
+| $J_{cv} \gg J_{train}$ | High variance | More training examples, fewer features, increase $\lambda$ |
 
-=====================================================================
+**Specific strategies:**
 
-Adam optimization algorithm - Better than gradient descent and faster - used as a default for neural networks. 
+- **Get more training examples**: Helps high variance; has no effect on high bias.
+- **Try smaller set of features**: Simplifies model, reduces high variance.
+- **Try getting additional features**: Adds expressiveness, reduces high bias.
+- **Add polynomial features**: Fixes high bias.
+- **Decrease $\lambda$**: Fixes high bias.
+- **Increase $\lambda$**: Fixes high variance.
 
-===================================================================
+---
 
-Debugging learning algorithm 
+## Practical Notes
 
-- Get More training examples
-  If high bias increasing training data has no effect. If high variance increasing training data does help 
+- Always scale/normalize inputs before training (zero mean, unit variance).
+- Use ReLU in hidden layers as the default; sigmoid is mainly for output layers.
+- Monitor the loss curve over epochs — it should decrease smoothly. Spikes suggest too-high learning rate.
+- Prefer Adam over plain gradient descent for most practical work.
 
-- Try smaller set of features 
-  Makes model simpler and reduces high variance problem 
+---
 
-- Try getting additional features 
-  Makes model flexible reduces high bias problems
+## Interview Quick-Fire
 
-- Try adding polynomial features 
-  Fixes high bias 
+**Q: What is the vanishing gradient problem?**
+During backpropagation through many layers, sigmoid/tanh activations squash gradients toward zero, making early layers learn very slowly. ReLU mitigates this because its gradient is 1 for positive inputs.
 
-- Try decrasing lamda
-  Fixes high bias 
+**Q: Why use ReLU instead of sigmoid in hidden layers?**
+ReLU is computationally cheap, does not saturate for large positive values (no vanishing gradient), and trains faster. Sigmoid saturates at both ends, causing vanishing gradients.
 
-- Try increasing lambda
-  Fixes high variance
+**Q: What does softmax do?**
+Converts raw logits into a probability distribution over $N$ classes: $a_j = e^{z_j} / \sum_k e^{z_k}$. All outputs sum to 1.
 
-High Bias - Unable to fit in more training set 
+**Q: What is Adam and why is it preferred?**
+Adam adapts the learning rate per parameter using estimates of first and second moments of gradients. It converges faster and is less sensitive to learning rate choice than SGD.
 
-High Variance - Unable to fit in more test set
+**Q: How do you diagnose high bias vs high variance?**
+Compare $J_{train}$ and $J_{cv}$. Both high → high bias. $J_{train}$ low but $J_{cv}$ much higher → high variance.
